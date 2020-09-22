@@ -86,7 +86,7 @@ def simulate_setup(trotter_steps=5, initial_state=None, samples=None, bs_paramet
     message_dict["distribution"] = distribution
     message_dict["parameters"] = {"trotter_steps":trotter_steps, "samples":samples, "initial_state":str(initial_state)}
     
-    with open("sim_result.json",'w') as f:
+    with open("result.json",'w') as f:
         f.write(json.dumps(message_dict, indent=2))
 
 def filter_single_photon_counts(state: photonic.PhotonicStateVector, n_photons=3):

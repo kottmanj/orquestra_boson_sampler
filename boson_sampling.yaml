@@ -21,7 +21,7 @@ steps:
       memory: "1Gi"
       disk: "15Gi"
   outputs:
-  - name: sim_result
+  - name: result
     type: message
  
 - name: analyse
@@ -38,7 +38,7 @@ steps:
       memory: "1Gi"
       disk: "1Gi"
   inputs:
-  - sim_result: ((simulate.sim_result))
+  - sim_result: ((simulate.result))
     type: message
   outputs:
   - name: three_photon_counts
