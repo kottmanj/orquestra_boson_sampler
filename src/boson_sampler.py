@@ -81,9 +81,61 @@ def simulate_setup(trotter_steps=5, initial_state=None, samples=None, bs_paramet
     message_dict = {}
     message_dict["message"] = message
     message_dict["schema"] = "message"
+    message_dict["S"] = 0
+    message_dict["qpm"]=2
     message_dict["distribution"] = distribution
     message_dict["parameters"] = {"trotter_steps":trotter_steps, "samples":samples, "initial_state":str(initial_state)}
     
     with open("distribution.json",'w') as f:
+        f.write(json.dumps(message_dict, indent=2))
+
+def filter_single_photon_counts(state: photonic.PhotonicStateVector, n_photons=3):
+    result = dict()
+    pathnames = [k for k in state.paths.keys()]
+
+    for comb in combinations(pathnames, n_photons):
+        key = ""
+        label = ""
+        for i in comb:
+            key += "|1>_" + str(i)
+            label += str(i)
+        result[label] = state.get_basis_state(string=key)
+
+    return result
+
+
+def filter_three_photon_counts(distribution):
+    with open(distribution, 'r') as f:
+        distribution = json.load(f)
+    setup = photonic.PhotonicSetup(pathnames=["a", "b", "c", "d", "e"], S=sim_results["S"], qpm=sim_results["qpm"])
+    wfn = setup.initialize_state(sim_result["distribution"])
+     
+    pathnames = [k for k in state.paths.keys()]
+
+    # all states with 3 photons in differnt paths '111'
+    result = filter_single_photon_counts(state=state, n_photons=3)
+
+    # all states with 2 photons in one path and 1 photon in another '21'
+    for comb in permutations(pathnames, 2):
+        key = "|2>_" + str(comb[0]) + "|1>_" + str(comb[1])
+        result[key] = state.get_basis_state(string=key)
+
+    # all states with 3 photons in one path
+    for path in pathnames:
+        key = "|3>_" + str(path)
+        result[key] = state.get_basis_state(string=key)
+     
+    message = "Three Photon Counts"
+
+    message_dict = {}
+    message_dict["message"] = message
+    message_dict["schema"] = "message"
+    message_dict["S"] = 0
+    message_dict["qpm"]=2
+    message_dict["wfn"] = str(wfn)
+    message_dict["parameters"] = sim_result["parameters"]
+    message_dict["three_photon_counts"] = result
+
+    with open("three_photon_counts.json",'w') as f:
         f.write(json.dumps(message_dict, indent=2))
 

@@ -8,20 +8,40 @@ imports:
     branch: "master"
 
 steps:
-- name: boson-sampling
+- name: simulate
   config:
     runtime:
       type: python3
       imports: [qcad-photonic]
       parameters:
-        file: qcad-photonic/src/asd.py
-        function: welcome
+        file: qcad-photonic/src/boson_sampler.py
+        function: simulate_crespi_setup
     resources:
       cpu: "1000m"
       memory: "1Gi"
       disk: "15Gi"
   outputs:
   - name: distribution
+    type: message
+ 
+- name: analyse
+  passed: [simulate]
+  config:
+    runtime:
+      type: python3
+      imports: [qcad-photonic]
+      parameters:
+        file: qcad-photonic/src/boson_sampler.py
+        function: filter_three_photon_counts
+    resrources:
+      cpu: "1000m"
+      memory: "1Gi"
+      disk: "1Gi"
+  inputs:
+  - name: ((simulate.distribution))
+    type: message
+  outputs:
+  - name: three_photon_counts
     type: message
 
 types:
