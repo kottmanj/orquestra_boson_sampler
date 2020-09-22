@@ -4,7 +4,7 @@ imports:
 - name: qcad-photonic
   type: git
   parameters:
-    repository: "git@github.com:kottmanj/photonic.git"
+    repository: "git@github.com:kottmanj/orquestra_boson_sampler.git"
     branch: "master"
 
 steps:
@@ -14,7 +14,7 @@ steps:
       type: python3
       imports: [qcad-photonic]
       parameters:
-        file: qcad-photonic/examples/boson_sampler.py
+        file: qcad-photonic/src/boson_sampler.py
         function: simulate_crespi_setup
     resources:
       cpu: "1000m"
