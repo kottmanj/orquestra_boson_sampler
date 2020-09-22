@@ -1,0 +1,28 @@
+apiVersion: io.orquestra.workflow/1.0.0
+name: boson-sampling
+imports:
+- name: qcad-photonic
+  type: git
+  parameters:
+    repository: "git@github.com:kottmanj/photonic.git"
+    branch: "master"
+
+steps:
+- name: boson-sampling
+  config:
+    runtime:
+      type: python3
+      imports: [qcad-photonic]
+      parameters:
+        file: qcad-photonic/examples/boson_sampler.py
+        function: simulate_crespi_setup
+    resources:
+      cpu: "1000m"
+      memory: "1Gi"
+      disk: "15Gi"
+  outputs:
+  - name: distribution
+    type: message
+
+types:
+- message
