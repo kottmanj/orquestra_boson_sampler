@@ -4,7 +4,7 @@ import photonic
 import numpy
 import json
 
-def simulate_crespi_setup()
+def simulate_crespi_setup():
     return simulate_setup(5)
 
 def simulate_setup(trotter_steps=5, initial_state=None, samples=None, bs_parameters=None, phases=None):
