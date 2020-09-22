@@ -104,10 +104,10 @@ def filter_single_photon_counts(state: photonic.PhotonicStateVector, n_photons=3
     return result
 
 
-def filter_three_photon_counts(distribution):
-    with open(distribution, 'r') as f:
-        distribution = json.load(f)
-    setup = photonic.PhotonicSetup(pathnames=["a", "b", "c", "d", "e"], S=sim_results["S"], qpm=sim_results["qpm"])
+def filter_three_photon_counts(sim_result):
+    with open(sim_result, 'r') as f:
+        sim_result = json.load(f)
+    setup = photonic.PhotonicSetup(pathnames=["a", "b", "c", "d", "e"], S=sim_result["S"], qpm=sim_result["qpm"])
     wfn = setup.initialize_state(sim_result["distribution"])
      
     pathnames = [k for k in state.paths.keys()]
