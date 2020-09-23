@@ -106,35 +106,40 @@ def filter_single_photon_counts(state: photonic.PhotonicStateVector, n_photons=3
     return result
 
 
-def filter_three_photon_counts(sim_result):
+def analyse(sim_result):
     with open(sim_result, 'r') as f:
         sim_result = json.load(f)
     setup = photonic.PhotonicSetup(pathnames=["a", "b", "c", "d", "e"], S=sim_result["S"], qpm=sim_result["qpm"])
     state = setup.initialize_state(sim_result["distribution"])
-     
     pathnames = [k for k in setup.paths.keys()]
+    
+    result = {}
+    for comb in combinations(pathnames, 3):
+        key = "|1>_" + str(comb[0]) + "|1>_" + str(comb[1]) + "|1>_" + str(comb[2])
+        label = "".join([i for i in comb])
+        result[label] = state.get_basis_state(string=key)
 
-    # all states with 3 photons in differnt paths '111'
-    result = filter_single_photon_counts(state=state, n_photons=3)
 
     # all states with 2 photons in one path and 1 photon in another '21'
     for comb in permutations(pathnames, 2):
         key = "|2>_" + str(comb[0]) + "|1>_" + str(comb[1])
-        result[key] = state.get_basis_state(string=key)
+        label = "".join([i for i in comb])
+        result[label] = state.get_basis_state(string=key)
 
     # all states with 3 photons in one path
     for path in pathnames:
         key = "|3>_" + str(path)
-        result[key] = state.get_basis_state(string=key)
+        label = "".join([i for i in comb])
+        result[label] = state.get_basis_state(string=key)
     
     result = {k: float(numpy.abs(v)) for k,v in result.items()} # numpy types are not json serializable, imaginary parts always zero
 
     message = "Three Photon Counts"
-    
+    print(result)    
     message_dict = {}
     message_dict["schema"] = "message"
     message_dict["state"] = str(state)
-    message_dict["three_photon_counts"] = result
+    message_dict["analyse"] = result
 
     with open("three_photon_counts.json",'w') as f:
         f.write(json.dumps(message_dict, indent=2))

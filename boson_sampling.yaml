@@ -33,7 +33,7 @@ steps:
       imports: [qcad-photonic]
       parameters:
         file: qcad-photonic/src/boson_sampler.py
-        function: filter_three_photon_counts
+        function: analyse
     resources:
       cpu: "1000m"
       memory: "1Gi"
@@ -42,7 +42,7 @@ steps:
   - sim_result: ((simulate.result))
     type: message
   outputs:
-  - name: three_photon_counts
+  - name: analyse
     type: message
 
 types:
