@@ -10,7 +10,6 @@ def simulate_crespi_setup():
     return simulate_setup(5)
 
 def simulate_setup(trotter_steps=5, initial_state=None, samples=None, bs_parameters=None, phases=None):
-    print("ASDASDASDASDASDASDASDASDASDASDASDASDASDASDASD")   
     # Default is the same as in the Paper
     if bs_parameters is None:
         bs_parameters = [0.19,0.55,0.4,0.76,0.54,0.95,0.48,0.99,0.51,0.44]
@@ -74,18 +73,19 @@ def simulate_setup(trotter_steps=5, initial_state=None, samples=None, bs_paramet
     wfn = tq.simulate(U, samples=samples)
     
     if samples is None:
-        distribution = {k.integer:numpy.abs(v)**2 for k,v in wfn.state.items() }
+        distribution = {k:numpy.abs(v)**2 for k,v in wfn.state.items() }
     else:
-        distribution = {k.integer:numpy.abs(v) for k,v in wfn.state.items() }
+        distribution = {k:numpy.abs(v) for k,v in wfn.state.items() }
     
-    message = "Boson Sampling Simulation"
-    
+    distribution = tq.QubitWaveFunction(state=distribution)
+    distribution = photonic.PhotonicStateVector(paths=setup.paths, state=distribution)
+    message = "Boson Sampling Simulation" 
     message_dict = {}
     message_dict["message"] = message
     message_dict["schema"] = "message"
     message_dict["S"] = 0
     message_dict["qpm"]=2
-    message_dict["distribution"] = distribution
+    message_dict["distribution"] = str(distribution)
     message_dict["parameters"] = {"trotter_steps":trotter_steps, "samples":samples, "initial_state":str(initial_state)}
     
     with open("result.json",'w') as f:
@@ -110,8 +110,7 @@ def filter_three_photon_counts(sim_result):
     with open(sim_result, 'r') as f:
         sim_result = json.load(f)
     setup = photonic.PhotonicSetup(pathnames=["a", "b", "c", "d", "e"], S=sim_result["S"], qpm=sim_result["qpm"])
-    wfn = tq.QubitWaveFunction(state=sim_result["distribution"])
-    state = photonic.PhotonicStateVector(paths=setup.paths, state=wfn)
+    state = setup.initialize_state(sim_result["distribution"])
      
     pathnames = [k for k in setup.paths.keys()]
 
@@ -127,9 +126,11 @@ def filter_three_photon_counts(sim_result):
     for path in pathnames:
         key = "|3>_" + str(path)
         result[key] = state.get_basis_state(string=key)
-     
-    message = "Three Photon Counts"
+    
+    result = {k: float(numpy.abs(v)) for k,v in result.items()} # numpy types are not json serializable, imaginary parts always zero
 
+    message = "Three Photon Counts"
+    
     message_dict = {}
     message_dict["schema"] = "message"
     message_dict["state"] = str(state)
