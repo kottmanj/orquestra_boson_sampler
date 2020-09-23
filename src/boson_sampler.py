@@ -109,9 +109,9 @@ def filter_three_photon_counts(sim_result):
         sim_result = json.load(f)
     setup = photonic.PhotonicSetup(pathnames=["a", "b", "c", "d", "e"], S=sim_result["S"], qpm=sim_result["qpm"])
     wfn = tq.QubitWaveFunction(state=sim_result["distribution"])
-    wfn = photonic.PhotonicStateVector(paths=setup.paths, state=wfn)
+    state = photonic.PhotonicStateVector(paths=setup.paths, state=wfn)
      
-    pathnames = [k for k in state.paths.keys()]
+    pathnames = [k for k in setup.paths.keys()]
 
     # all states with 3 photons in differnt paths '111'
     result = filter_single_photon_counts(state=state, n_photons=3)
