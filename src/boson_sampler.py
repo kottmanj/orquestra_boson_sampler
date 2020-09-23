@@ -4,6 +4,8 @@ import photonic
 import numpy
 import json
 
+from itertools import combinations
+
 def simulate_crespi_setup():
     return simulate_setup(5)
 
