@@ -131,12 +131,8 @@ def filter_three_photon_counts(sim_result):
     message = "Three Photon Counts"
 
     message_dict = {}
-    message_dict["message"] = message
     message_dict["schema"] = "message"
-    message_dict["S"] = 0
-    message_dict["qpm"]=2
-    message_dict["distribution"] = sim_result["distribution"]
-    message_dict["parameters"] = sim_result["parameters"]
+    message_dict["state"] = str(state)
     message_dict["three_photon_counts"] = result
 
     with open("three_photon_counts.json",'w') as f:

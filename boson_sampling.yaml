@@ -8,6 +8,7 @@ imports:
     branch: "master"
 
 steps:
+# Simulate raw distributions
 - name: simulate
   config:
     runtime:
@@ -23,6 +24,7 @@ steps:
   outputs:
   - name: result
     type: message
+# Post process distributions, get three_photon_counts
 - name: analyse
   passed: [simulate]
   config:
