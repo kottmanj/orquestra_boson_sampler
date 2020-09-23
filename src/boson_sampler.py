@@ -135,7 +135,7 @@ def filter_three_photon_counts(sim_result):
     message_dict["schema"] = "message"
     message_dict["S"] = 0
     message_dict["qpm"]=2
-    message_dict["wfn"] = str(wfn)
+    message_dict["distribution"] = sim_result["distribution"]
     message_dict["parameters"] = sim_result["parameters"]
     message_dict["three_photon_counts"] = result
 
