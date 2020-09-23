@@ -11,7 +11,7 @@ steps:
 - name: simulate
   config:
     runtime:
-      type: python3
+      language: python3
       imports: [qcad-photonic]
       parameters:
         file: qcad-photonic/src/boson_sampler.py
@@ -23,17 +23,16 @@ steps:
   outputs:
   - name: result
     type: message
- 
 - name: analyse
   passed: [simulate]
   config:
     runtime:
-      type: python3
+      language: python3
       imports: [qcad-photonic]
       parameters:
         file: qcad-photonic/src/boson_sampler.py
         function: filter_three_photon_counts
-    resrources:
+    resources:
       cpu: "1000m"
       memory: "1Gi"
       disk: "1Gi"
