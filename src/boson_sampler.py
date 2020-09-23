@@ -141,6 +141,6 @@ def analyse(sim_result):
     message_dict["state"] = str(state)
     message_dict["analyse"] = result
 
-    with open("three_photon_counts.json",'w') as f:
+    with open("analyse.json",'w') as f:
         f.write(json.dumps(message_dict, indent=2))
 
