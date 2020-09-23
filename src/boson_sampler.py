@@ -111,20 +111,17 @@ def filter_three_photon_counts(state):
     result = {}
     for comb in combinations(pathnames, 3):
         key = "|1>_" + str(comb[0]) + "|1>_" + str(comb[1]) + "|1>_" + str(comb[2])
-        label = "".join([i for i in comb])
-        result[label] = state.get_basis_state(string=key)
+        result[key] = state.get_basis_state(string=key)
 
     # all states with 2 photons in one path and 1 photon in another '21'
     for comb in permutations(pathnames, 2):
         key = "|2>_" + str(comb[0]) + "|1>_" + str(comb[1])
-        label = "".join([i for i in comb])
-        result[label] = state.get_basis_state(string=key)
+        result[key] = state.get_basis_state(string=key)
 
     # all states with 3 photons in one path
     for path in pathnames:
         key = "|3>_" + str(path)
-        label = "".join([i for i in comb])
-        result[label] = state.get_basis_state(string=key)
+        result[key] = state.get_basis_state(string=key)
     
     return result
 
@@ -145,7 +142,7 @@ def analyse(sim_result):
     message_dict["schema"] = "message"
     message_dict["state"] = str(state)
     message_dict["one_photon_counts"] = one_photon_counts
-    message_dict["three_photon_counts"] = one_photon_counts
+    message_dict["three_photon_counts"] = three_photon_counts
     message_dict["samples"] = sim_result["parameters"]["samples"]
     message_dict["checksum"] = checksum
 
