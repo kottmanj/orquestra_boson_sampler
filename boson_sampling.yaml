@@ -22,7 +22,8 @@ steps:
       memory: "1Gi"
       disk: "15Gi"
   inputs:
-  - trotter_steps: 50
+  - trotter_steps: 5
+    type: int
   outputs:
   - name: result
     type: message
@@ -49,3 +50,4 @@ steps:
 
 types:
 - message
+- int
