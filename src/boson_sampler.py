@@ -6,8 +6,8 @@ import json
 
 from itertools import combinations, permutations
 
-def simulate_crespi_setup():
-    return simulate_setup(5)
+def simulate_crespi_setup(trotter_steps):
+    return simulate_setup(trotter_steps)
 
 def simulate_setup(trotter_steps=5, initial_state=None, samples=None, bs_parameters=None, phases=None):
     # Default is the same as in the Paper

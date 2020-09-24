@@ -21,6 +21,8 @@ steps:
       cpu: "1000m"
       memory: "1Gi"
       disk: "15Gi"
+  inputs:
+  - trotter_steps: 50
   outputs:
   - name: result
     type: message
