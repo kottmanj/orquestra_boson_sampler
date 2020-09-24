@@ -27,6 +27,8 @@ def simulate_setup(trotter_steps=5, initial_state=None, samples=None, bs_paramet
 
     # transform phases to pi*t form
     phase_parameters = [phase / numpy.pi for phase in phases]
+    # transform beam-splitter parameters to pi*t
+    bs_parameters = [numpy.arcsin(p)/numpy.pi for p in bs_parameters]
 
     initial_state = setup.initialize_state(initial_state)
     U = tq.circuit.QCircuit()
@@ -69,23 +71,16 @@ def simulate_setup(trotter_steps=5, initial_state=None, samples=None, bs_paramet
     setup.add_phase_shifter(path=b, t=-phase_parameters[7])
     setup.add_beamsplitter(path_a=a, path_b=b, t=bs_parameters[9], phi=0, steps=trotter_steps)
     
-    U = setup.setup
-    wfn = tq.simulate(U, samples=samples)
-    
-    if samples is None:
-        distribution = {k:numpy.abs(v)**2 for k,v in wfn.state.items() }
-    else:
-        distribution = {k:numpy.abs(v) for k,v in wfn.state.items() }
-    
-    distribution = tq.QubitWaveFunction(state=distribution)
-    distribution = photonic.PhotonicStateVector(paths=setup.paths, state=distribution)
+    result = setup.simulate_wavefunction()
+    result._state = {k:numpy.abs(v)**2 for k,v in result.state.state.items()} 
+
     message = "Boson Sampling Simulation" 
     message_dict = {}
     message_dict["message"] = message
     message_dict["schema"] = "message"
     message_dict["S"] = 0
     message_dict["qpm"]=2
-    message_dict["distribution"] = str(distribution)
+    message_dict["distribution"] = str(result)
     message_dict["parameters"] = {"trotter_steps":trotter_steps, "samples":samples, "initial_state":str(initial_state)}
     
     with open("result.json",'w') as f:
