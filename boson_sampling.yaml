@@ -22,7 +22,7 @@ steps:
       memory: "1Gi"
       disk: "15Gi"
   inputs:
-  - trotter_steps: 5
+  - trotter_steps: 10
     type: int
   outputs:
   - name: result

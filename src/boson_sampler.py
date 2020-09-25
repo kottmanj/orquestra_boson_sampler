@@ -1,6 +1,6 @@
 # Orquestra usable example of a boson sampling simulation
-import tequila as tq
 import photonic
+import tequila as tq
 import numpy
 import json
 
